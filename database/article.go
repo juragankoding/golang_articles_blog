@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 
+	"example.com/chin/env"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -16,22 +18,15 @@ type Article struct {
 
 type ArticleAdapter interface {
 	InsertArticleIntoDatabase(article Article) *mongo.InsertOneResult
+	ReadSingleArticle(id string) Article
 }
-
-// type articleAdapter struct {
-// 	article ArticleAdapter
-// }
-
-// func (W *articleAdapter) InsertArticle(article Article) {
-// 	W.article.insertArticleIntoDatabase(article)
-// }
 
 type ArticleMongoDb struct {
 	Client *mongo.Client
 }
 
 func (AM *ArticleMongoDb) InsertArticleIntoDatabase(article Article) *mongo.InsertOneResult {
-	articleCollection := AM.Client.Database("testing").Collection("article")
+	articleCollection := AM.Client.Database(env.GetMongoDatabase()).Collection("article")
 
 	insertedData, err := articleCollection.InsertOne(context.TODO(), article)
 
@@ -40,4 +35,16 @@ func (AM *ArticleMongoDb) InsertArticleIntoDatabase(article Article) *mongo.Inse
 	}
 
 	return insertedData
+}
+
+func (AM *ArticleMongoDb) ReadSingleArticle(id string) Article {
+	articleCollection := AM.Client.Database(env.GetMongoDatabase()).Collection("article")
+
+	article := articleCollection.FindOne(context.TODO(), bson.M{})
+
+	articleData := Article{}
+
+	article.Decode(&articleData)
+
+	return articleData
 }

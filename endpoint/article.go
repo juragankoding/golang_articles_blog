@@ -3,7 +3,7 @@ package endpoint
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"example.com/chin/connection"
@@ -22,7 +22,7 @@ type response struct {
 }
 
 func CreateArticle(w http.ResponseWriter, r *http.Request) {
-	bodyData, _ := ioutil.ReadAll(r.Body)
+	bodyData, _ := io.ReadAll(r.Body)
 
 	var article requestArticle
 
@@ -62,7 +62,9 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetArticle(w http.ResponseWriter, r *http.Request) {
-	r.URL.Query()
+	query := r.URL.Query()
+
+	fmt.Println(query)
 
 	// dateParam := chi.URLParam(r, "date")
 	// slugParam := chi.URLParam(r, "slug")

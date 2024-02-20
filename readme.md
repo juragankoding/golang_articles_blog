@@ -11,8 +11,7 @@ membuat website dengan menggunakan golang dan framework Chi.
 
 ## Pertama Install
 
-1. `go install github.com/swaggo/swag/cmd/swag@latest`
-2. `go install github.com/cosmtrek/air@latest`
+1. `go install github.com/cosmtrek/air@latest`
 
 ## Cara Menjalankan
 
