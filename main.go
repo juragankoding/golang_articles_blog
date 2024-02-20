@@ -1,53 +1,22 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net/http"
 
+	"example.com/chin/endpoint"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-playground/validator/v10"
+	"github.com/joho/godotenv"
 )
 
-type requestArticle struct {
-	Name        string `validate:"required", json:"name"`
-	Description string `validate:"required", json:"description"`
-}
-
-func getArticle(w http.ResponseWriter, r *http.Request) {
-	// dateParam := chi.URLParam(r, "date")
-	// slugParam := chi.URLParam(r, "slug")
-
-	w.Write([]byte("data ini article"))
-}
-
-func createArticle(w http.ResponseWriter, r *http.Request) {
-	bodyData, _ := ioutil.ReadAll(r.Body)
-
-	var article requestArticle
-
-	json.Unmarshal(bodyData, &article)
-
-	fmt.Println(article)
-
-	validate := validator.New()
-
-	err := validate.Struct(article)
-
+func main() {
+	err := godotenv.Load()
 	if err != nil {
-		w.WriteHeader(400)
-		w.Write([]byte(err.Error()))
+		log.Fatal("Error loading .env file")
 	}
 
-	data, err := json.Marshal(article)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(data)
-}
-
-func main() {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -56,14 +25,15 @@ func main() {
 		w.Write([]byte("Hello World!"))
 	})
 
-	r.Get("/articles/{date}-{slug}", getArticle)
-	r.Post("/article", createArticle)
+	r.Get("/articles/{date}-{slug}", endpoint.GetArticle)
+	r.Post("/article", endpoint.CreateArticle)
 
-	err := http.ListenAndServe(":3000", r)
+	fmt.Println("Server berlajan di port :3000")
+
+	err = http.ListenAndServe(":3000", r)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("Server berlajan di port :3000")
 }

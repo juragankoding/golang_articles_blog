@@ -1,4 +1,4 @@
-package mongorm
+package database
 
 import (
 	"context"
@@ -15,23 +15,23 @@ type Article struct {
 }
 
 type ArticleAdapter interface {
-	insertArticleIntoDatabase(article Article) *mongo.InsertOneResult
+	InsertArticleIntoDatabase(article Article) *mongo.InsertOneResult
 }
 
-type articleAdapter struct {
-	article ArticleAdapter
-}
+// type articleAdapter struct {
+// 	article ArticleAdapter
+// }
 
-func (W *articleAdapter) InsertArticle(article Article) {
-	W.article.insertArticleIntoDatabase(article)
-}
+// func (W *articleAdapter) InsertArticle(article Article) {
+// 	W.article.insertArticleIntoDatabase(article)
+// }
 
 type ArticleMongoDb struct {
-	client *mongo.Client
+	Client *mongo.Client
 }
 
-func (AM *ArticleMongoDb) insertArticleIntoDatabase(article Article) *mongo.InsertOneResult {
-	articleCollection := AM.client.Database("testing").Collection("article")
+func (AM *ArticleMongoDb) InsertArticleIntoDatabase(article Article) *mongo.InsertOneResult {
+	articleCollection := AM.Client.Database("testing").Collection("article")
 
 	insertedData, err := articleCollection.InsertOne(context.TODO(), article)
 
