@@ -4,7 +4,21 @@
 
 membuat website dengan menggunakan golang dan framework Chi.
 
-### testmirror
+## Yang dibutuhkan
+
+1. golang lib
+2. database mongodb
+
+## Pertama Install
+
+1. `go install github.com/swaggo/swag/cmd/swag@latest`
+2. `go install github.com/cosmtrek/air@latest`
+
+## Cara Menjalankan
+
+```
+air main.go
+```
 
 ## Referensi
 
