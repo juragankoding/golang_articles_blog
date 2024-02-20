@@ -62,6 +62,8 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetArticle(w http.ResponseWriter, r *http.Request) {
+	r.URL.Query()
+
 	// dateParam := chi.URLParam(r, "date")
 	// slugParam := chi.URLParam(r, "slug")
 
